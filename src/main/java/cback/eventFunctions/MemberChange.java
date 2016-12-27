@@ -20,7 +20,7 @@ public class MemberChange {
         IUser user = event.getUser();
 
         //Memberlog message
-        Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDCE5  " + user.getName() + " **joined** " + event.getGuild().getName() + user.mention());
+        Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDCE5  " + user.getName() + " **joined** " + event.getGuild().getName() + " " + user.mention());
 
     }
 
@@ -38,7 +38,7 @@ public class MemberChange {
         IUser user = event.getUser();
 
         //Memberlog message
-        Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDD28  " + user.getName() + " was **banned**. " + user.mention());
+        Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDD28  " + user.getName() + " was **banned** from " + event.getGuild().getName() + " " + user.mention());
 
     }
 
