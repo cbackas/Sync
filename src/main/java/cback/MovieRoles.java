@@ -1,3 +1,5 @@
+package cback;
+
 public enum MovieRoles {
     STAFF("STAFF", "257995763399917569"),
     ADMIN("ADMIN", "256249078596370433"),

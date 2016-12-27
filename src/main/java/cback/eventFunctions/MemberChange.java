@@ -1,4 +1,4 @@
-package eventFunctions;
+package cback.eventFunctions;
 
 import cback.SyncBot;
 import cback.Util;

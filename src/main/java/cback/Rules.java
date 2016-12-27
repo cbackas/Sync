@@ -1,3 +1,5 @@
+package cback;
+
 public enum Rules {
     one("1", Util.getRule("251922065047683073")),
     two("2", Util.getRule("251922120446181387")),

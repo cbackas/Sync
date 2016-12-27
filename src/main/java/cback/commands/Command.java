@@ -1,4 +1,4 @@
-package commands;
+package cback.commands;
 
 import cback.SyncBot;
 import sx.blah.discord.api.IDiscordClient;

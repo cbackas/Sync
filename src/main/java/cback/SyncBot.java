@@ -1,4 +1,6 @@
-import cback.commands.*;
+package cback;
+
+import cback.commands.Command;
 import cback.eventFunctions.*;
 import org.reflections.Reflections;
 import sx.blah.discord.api.ClientBuilder;

@@ -1,3 +1,5 @@
+package cback;
+
 import com.google.gson.JsonSyntaxException;
 import in.ashwanthkumar.slack.webhook.Slack;
 import in.ashwanthkumar.slack.webhook.SlackMessage;
