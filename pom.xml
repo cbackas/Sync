@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.github.austinv11</groupId>
             <artifactId>Discord4J</artifactId>
-            <version>97e3a2b</version>
+            <version>aafd5fe</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
