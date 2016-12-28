@@ -123,12 +123,11 @@ public class Util {
     }
 
     public static void sendGlobalChat(String URL, IMessage message) {
-        String content = message.getFormattedContent();
-        content.replaceAll("@everyone","everyone");
+        String content = message.getFormattedContent().replaceAll("@everyone","everyone");
         try {
             new Slack(URL)
                     .icon(message.getAuthor().getAvatarURL())
-                    .displayName(message.getAuthor().getDisplayName(message.getGuild()))
+                    .displayName(message.getAuthor().getDisplayName(message.getGuild()) + " (" + message.getGuild().getName() + ")")
                     .push(new SlackMessage(content));
         } catch (Exception e) {
             e.printStackTrace();
