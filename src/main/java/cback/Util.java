@@ -123,7 +123,7 @@ public class Util {
     }
 
     public static void sendGlobalChat(String URL, IMessage message) {
-        String content = message.getFormattedContent().replaceAll("@everyone","everyone");
+        String content = message.getFormattedContent().replaceAll("@everyone","everyone").replaceAll("@here","here");
         try {
             new Slack(URL)
                     .icon(message.getAuthor().getAvatarURL())
