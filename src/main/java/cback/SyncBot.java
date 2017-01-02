@@ -115,12 +115,12 @@ public class SyncBot {
 
             //Check for bot mentions
             if (mentions.contains(client.getOurUser()) || mentions.contains(client.getUserByID("229701685998518274")) || mentions.contains(client.getUserByID("261755032226103296")) || mentions.contains(client.getUserByID("229701685998518274"))) {
-                Util.sendPrivateMessage(client.getUserByID("73416411443113984"), "A bot was mentioned in ``" + message.getGuild().getName() + "/#" + message.getChannel().getName() + "``" + " by **" + message.getAuthor().getDisplayName(client.getGuildByID("256248900124540929")) + "**");
+                Util.sendPrivateMessage(client.getUserByID("73416411443113984"), "A bot was mentioned in **" + message.getGuild().getName() + "/**" + message.getChannel().mention() + " by **" + message.getAuthor().getDisplayName(client.getGuildByID("256248900124540929")) + "**");
             }
 
             //cback mentions
             if (lowerCase.contains("cback")) {
-                Util.sendPrivateMessage(client.getUserByID("73416411443113984"), "**" + message.getAuthor().getDisplayName(client.getGuildByID("256248900124540929")) + "** said your name in ``" + message.getGuild().getName() + "/#" + message.getChannel().getName() + "``");
+                Util.sendPrivateMessage(client.getUserByID("73416411443113984"), "**" + message.getAuthor().getDisplayName(client.getGuildByID("256248900124540929")) + "** said your name in **" + message.getGuild().getName() + "/**" + message.getChannel().mention());
             }
 
             if (GLOBAL_CHANNELS.contains(message.getChannel().getID())) {
