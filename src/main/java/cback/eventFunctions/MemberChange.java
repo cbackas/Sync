@@ -54,8 +54,12 @@ public class MemberChange {
 
                         try {
                             event.getClient().getGuildByID(g).banUser(user, 1);
+
+                            Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "**Ban Successfully Synced**");
                         } catch (Exception e) {
                             e.printStackTrace();
+
+                            Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "**Ban Sync Failed**");
                         }
 
                     });
