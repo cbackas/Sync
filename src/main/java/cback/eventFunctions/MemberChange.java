@@ -82,11 +82,11 @@ public class MemberChange {
                                 guild.banUser(user, 1);
                             }
 
-                            MessageUtils.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "**Ban successfully synced to " + guild.getName() + "**");
                         } catch (Exception e) {
-                            e.printStackTrace();
 
+                            e.printStackTrace();
                             MessageUtils.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "**Ban sync failed for " + guild.getName() + "**");
+
                         }
 
                     });
