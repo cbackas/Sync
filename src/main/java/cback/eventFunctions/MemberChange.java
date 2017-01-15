@@ -1,8 +1,7 @@
 package cback.eventFunctions;
 
+import cback.MessageUtils;
 import cback.SyncBot;
-import cback.Util;
-import cback.globalChannels;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.UserBanEvent;
 import sx.blah.discord.handle.impl.events.UserJoinEvent;
@@ -27,7 +26,7 @@ public class MemberChange {
         IUser user = event.getUser();
 
         //Memberlog message
-        Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDCE5  " + user.getName() + " **joined** " + event.getGuild().getName() + " " + user.mention());
+        MessageUtils.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDCE5  " + user.getName() + " **joined** " + event.getGuild().getName() + " " + user.mention());
 
     }
 
@@ -36,7 +35,7 @@ public class MemberChange {
         IUser user = event.getUser();
 
         //Memberlog message
-        Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDCE4  " + user.getName() + " **left** " + event.getGuild().getName() + " " + user.mention());
+        MessageUtils.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDCE4  " + user.getName() + " **left** " + event.getGuild().getName() + " " + user.mention());
 
     }
 
@@ -45,7 +44,7 @@ public class MemberChange {
         IUser user = event.getUser();
 
         //Memberlog message
-        Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDD28  " + user.getName() + " was **banned** from " + event.getGuild().getName() + " " + user.mention());
+        MessageUtils.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "\uD83D\uDD28  " + user.getName() + " was **banned** from " + event.getGuild().getName() + " " + user.mention());
 
         if (ALL_SERVERS.contains(event.getGuild().getID())) {
 
@@ -60,11 +59,11 @@ public class MemberChange {
                                 guild.banUser(user, 1);
                             }
 
-                            Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "**Ban Successfully Synced**");
+                            MessageUtils.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "**Ban Successfully Synced**");
                         } catch (Exception e) {
                             e.printStackTrace();
 
-                            Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "**Ban Sync Failed**");
+                            MessageUtils.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "**Ban Sync Failed**");
                         }
 
                     });

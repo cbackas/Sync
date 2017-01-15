@@ -1,8 +1,6 @@
 package cback;
 
 import com.google.gson.JsonSyntaxException;
-import in.ashwanthkumar.slack.webhook.Slack;
-import in.ashwanthkumar.slack.webhook.SlackMessage;
 import org.apache.http.message.BasicNameValuePair;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.DiscordClientImpl;
@@ -11,7 +9,6 @@ import sx.blah.discord.api.internal.DiscordUtils;
 import sx.blah.discord.api.internal.json.objects.UserObject;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.io.File;
@@ -24,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Util {
+public class Utils {
 
     public static File botPath;
 
@@ -38,68 +35,9 @@ public class Util {
         }
     }
 
-    public static void sendMessage(IChannel channel, String message) {
-        try {
-            channel.sendMessage(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static IMessage sendBufferedMessage(IChannel channel, String message) {
-        RequestBuffer.RequestFuture<IMessage> sentMessage = RequestBuffer.request(() -> {
-            try {
-                return channel.sendMessage(message);
-            } catch (MissingPermissionsException | DiscordException e) {
-                e.printStackTrace();
-            }
-            return null;
-        });
-        return sentMessage.get();
-    }
-
-    public static void deleteMessage(IMessage message) {
-        try {
-            message.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void deleteBufferedMessage(IMessage message) {
-        RequestBuffer.request(() -> {
-            try {
-                message.delete();
-            } catch (MissingPermissionsException | DiscordException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    public static void bulkDelete(IChannel channel, List<IMessage> toDelete) {
-        RequestBuffer.request(() -> {
-            if (toDelete.size() > 0) {
-                if (toDelete.size() == 1) {
-                    try {
-                        toDelete.get(0).delete();
-                    } catch (MissingPermissionsException | DiscordException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        channel.getMessages().bulkDelete(toDelete);
-                    } catch (DiscordException | MissingPermissionsException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        });
-    }
-
     public static void errorLog(IMessage message, String text) {
         try {
-            Util.sendPrivateMessage(SyncBot.getInstance().getClient().getUserByID("73416411443113984"), text + " in ``#" + message.getChannel().getName() + "``");
+            MessageUtils.sendPrivateMessage(SyncBot.getInstance().getClient().getUserByID("73416411443113984"), text + " in ``#" + message.getChannel().getName() + "``");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,15 +52,7 @@ public class Util {
         return null;
     }
 
-    public static void sendPrivateMessage(IUser user, String message) {
-        try {
-            user.getClient().getOrCreatePMChannel(user).sendMessage(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void sendGlobalChat(String URL, IMessage message) {
+    /*public static void sendGlobalChat(String URL, IMessage message) {
         String content = message.getFormattedContent().replaceAll("@everyone","everyone").replaceAll("@here","here");
         try {
             new Slack(URL)
@@ -132,7 +62,7 @@ public class Util {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public static int toInt(long value) {
         try {
@@ -208,30 +138,6 @@ public class Util {
 
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static List<IMessage> getSuggestions() {
-        try {
-            IChannel channel = SyncBot.getInstance().getClient().getGuildByID("256248900124540929").getChannelByID("256491839870337024");
-
-            List<IMessage> messages = channel.getPinnedMessages();
-
-            return messages;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static String getRule(String ruleID) {
-        try {
-            String rule = SyncBot.getInstance().getClient().getChannelByID("251916332747063296").getMessageByID(ruleID).getContent();
-
-            return rule;
         } catch (Exception e) {
             e.printStackTrace();
         }

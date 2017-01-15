@@ -1,7 +1,5 @@
 package cback.eventFunctions;
 
-import cback.Util;
-import cback.globalChannels;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.NickNameChangeEvent;
 import sx.blah.discord.handle.obj.IGuild;
