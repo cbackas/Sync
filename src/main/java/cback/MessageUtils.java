@@ -1,12 +1,10 @@
 package cback;
 
+import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.EmbedBuilder;
-import sx.blah.discord.util.MissingPermissionsException;
-import sx.blah.discord.util.RequestBuffer;
+import sx.blah.discord.util.*;
 
 import java.util.List;
 
@@ -32,6 +30,18 @@ public class MessageUtils {
             return null;
         });
         return sentMessage.get();
+    }
+
+    public static IMessage sendEmbed(IChannel channel, EmbedObject embedObject) {
+        RequestBuffer.RequestFuture<IMessage> future = RequestBuffer.request(() -> {
+            try {
+                return new MessageBuilder(SyncBot.getInstance().getClient()).withEmbed(embedObject)
+                        .withChannel(channel).send();
+            } catch (Exception e) {
+            }
+            return null;
+        });
+        return future.get();
     }
 
     public static void sendPrivateMessage(IUser user, String message) {
