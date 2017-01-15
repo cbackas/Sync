@@ -6,8 +6,8 @@ import org.reflections.Reflections;
 import sx.blah.discord.api.ClientBuilder;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
@@ -15,7 +15,6 @@ import sx.blah.discord.modules.Configuration;
 import sx.blah.discord.util.DiscordException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -35,8 +34,6 @@ public class SyncBot {
     private static final Pattern COMMAND_PATTERN = Pattern.compile("^//([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
     public static final String MEMBERLOG_CHANNEL_ID = "263122800313761792";
     public static final String GENERAL_CHANNEL_ID = "256248900124540929";
-
-    public static final List<String> GLOBAL_CHANNELS = Arrays.asList("263148121654034442", "263148339258720257", "263148412319301634");
 
     public static void main(String[] args) {
         new SyncBot();
@@ -121,18 +118,6 @@ public class SyncBot {
             //cback mentions
             if (lowerCase.contains("cback")) {
                 MessageUtils.sendPrivateMessage(client.getUserByID("73416411443113984"), "**" + message.getAuthor().getDisplayName(client.getGuildByID("256248900124540929")) + "** said your name in **" + message.getGuild().getName() + "/**" + message.getChannel().mention());
-            }
-
-            if (GLOBAL_CHANNELS.contains(message.getChannel().getID())) {
-
-                GLOBAL_CHANNELS.stream()
-                .filter(c -> !c.equals(message.getChannel().getID()))
-                        .forEach(c -> {
-
-                    String url = globalChannels.getChannel(c).serverURL;
-                    Utils.sendGlobalChat(url, message);
-
-                });
             }
 
         }

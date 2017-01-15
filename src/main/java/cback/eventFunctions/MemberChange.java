@@ -3,9 +3,9 @@ package cback.eventFunctions;
 import cback.MessageUtils;
 import cback.SyncBot;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.handle.impl.events.UserBanEvent;
-import sx.blah.discord.handle.impl.events.UserJoinEvent;
-import sx.blah.discord.handle.impl.events.UserLeaveEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserBanEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserJoinEvent;
+import sx.blah.discord.handle.impl.events.guild.member.UserLeaveEvent;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 

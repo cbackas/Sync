@@ -52,18 +52,6 @@ public class Utils {
         return null;
     }
 
-    /*public static void sendGlobalChat(String URL, IMessage message) {
-        String content = message.getFormattedContent().replaceAll("@everyone","everyone").replaceAll("@here","here");
-        try {
-            new Slack(URL)
-                    .icon(message.getAuthor().getAvatarURL())
-                    .displayName(message.getAuthor().getDisplayName(message.getGuild()) + " (" + message.getGuild().getName() + ")")
-                    .push(new SlackMessage(content));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
     public static int toInt(long value) {
         try {
             return Math.toIntExact(value);
