@@ -7,6 +7,7 @@ import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.UserBanEvent;
 import sx.blah.discord.handle.impl.events.UserJoinEvent;
 import sx.blah.discord.handle.impl.events.UserLeaveEvent;
+import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IUser;
 
 import java.util.Arrays;
@@ -53,7 +54,11 @@ public class MemberChange {
                     .forEach(g -> {
 
                         try {
-                            event.getClient().getGuildByID(g).banUser(user, 1);
+                            IGuild guild = event.getClient().getGuildByID(g);
+
+                            if (!guild.getBannedUsers().contains(user)) {
+                                guild.banUser(user, 1);
+                            }
 
                             Util.sendMessage(bot.getClient().getChannelByID(SyncBot.MEMBERLOG_CHANNEL_ID), "**Ban Successfully Synced**");
                         } catch (Exception e) {
@@ -65,5 +70,6 @@ public class MemberChange {
                     });
         }
     }
+
 
 }
