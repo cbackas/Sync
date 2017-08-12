@@ -21,7 +21,7 @@ public class MemberChange {
         this.bot = bot;
     }
 
-    public static final List<String> ALL_SERVERS = Arrays.asList("192441520178200577", "256248900124540929", "191589587817070593");
+    public static final List<String> ALL_SERVERS = Arrays.asList("192441520178200577", "256248900124540929", "191589587817070593", "263120914894422017");
 
     @EventSubscriber
     public void memberJoin(UserJoinEvent event) {
