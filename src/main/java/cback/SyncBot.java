@@ -106,20 +106,6 @@ public class SyncBot {
                 String[] argsArr = args.isEmpty() ? new String[0] : args.split(" ");
                 command.get().execute(this, client, argsArr, guild, message, isPrivate);
             }
-        } else {
-            String lowerCase = message.getContent().toLowerCase();
-            List<IUser> mentions = message.getMentions();
-
-            //Check for bot mentions
-            if (mentions.contains(client.getOurUser()) || mentions.contains(client.getUserByID("229701685998518274")) || mentions.contains(client.getUserByID("261755032226103296")) || mentions.contains(client.getUserByID("229701685998518274"))) {
-                MessageUtils.sendPrivateMessage(client.getUserByID("73416411443113984"), "A bot was mentioned in **" + message.getGuild().getName() + "/**" + message.getChannel().mention() + " by **" + message.getAuthor().getDisplayName(client.getGuildByID("256248900124540929")) + "**");
-            }
-
-            //cback mentions
-            if (lowerCase.contains("cback")) {
-                MessageUtils.sendPrivateMessage(client.getUserByID("73416411443113984"), "**" + message.getAuthor().getDisplayName(client.getGuildByID("256248900124540929")) + "** said your name in **" + message.getGuild().getName() + "/**" + message.getChannel().mention());
-            }
-
         }
     }
 
