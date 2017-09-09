@@ -10,11 +10,12 @@ import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.modules.Configuration;
 import sx.blah.discord.util.DiscordException;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -28,19 +29,20 @@ public class SyncBot {
 
     private ConfigManager configManager;
 
-    private List<String> botAdmins = new ArrayList<>();
     public List<Command> registeredCommands = new ArrayList<>();
 
     private static final Pattern COMMAND_PATTERN = Pattern.compile("^//([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
-    public static final String MEMBERLOG_CHANNEL_ID = "263122800313761792";
-    public static final String GENERAL_CHANNEL_ID = "256248900124540929";
+
+    public static Color BOT_COLOR = Color.decode("#" + "023563");
+    public static final long MEMBERLOG_CH_ID = 263122800313761792l;
+    public static final long ERROR_CH_ID = 346104666796589056l;
+    public static final List<Long> ALL_SERVERS = Arrays.asList(192441520178200577l, 256248900124540929l, 191589587817070593l, 263120914894422017l);
 
     public static void main(String[] args) {
         new SyncBot();
     }
 
     public SyncBot() {
-
         instance = this;
 
         //instantiate config manager first as connect() relies on tokens
@@ -52,12 +54,6 @@ public class SyncBot {
         client.getDispatcher().registerListener(new NicknameChange());
 
         registerAllCommands();
-
-        botAdmins.add("109109946565537792");
-        botAdmins.add("148279556619370496");
-        botAdmins.add("73416411443113984");
-        botAdmins.add("144412318447435776");
-
     }
 
     private void connect() {
@@ -111,20 +107,17 @@ public class SyncBot {
 
     @EventSubscriber
     public void onReadyEvent(ReadyEvent event) {
+        client = event.getClient();
         System.out.println("Logged in.");
-    }
 
-
-    public ConfigManager getConfigManager() {
-        return configManager;
     }
 
     public IDiscordClient getClient() {
         return client;
     }
 
-    public List<String> getBotAdmins() {
-        return botAdmins;
+    public static SyncBot getInstance() {
+        return instance;
     }
 
     private void registerAllCommands() {
@@ -147,9 +140,4 @@ public class SyncBot {
             }
         });
     }
-
-    public static SyncBot getInstance() {
-        return instance;
-    }
-
 }

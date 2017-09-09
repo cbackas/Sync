@@ -7,6 +7,7 @@ import org.json.simple.parser.JSONParser;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class ConfigManager {
 
     private void initConfig() {
         try {
-            configFile = new File(Utils.botPath, "syncconfig.json");
+            configFile = new File(botPath, "syncconfig.json");
             if (configFile.exists()) {
                 JSONParser parser = new JSONParser();
                 FileReader reader = new FileReader(configFile);
@@ -112,6 +113,19 @@ public class ConfigManager {
             return Optional.of(token);
         } else {
             return Optional.empty();
+        }
+    }
+
+    /**
+     * Botpath
+     */
+    public static File botPath;
+
+    static {
+        try {
+            botPath = new File(SyncBot.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 }
