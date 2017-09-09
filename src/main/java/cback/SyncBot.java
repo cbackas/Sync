@@ -10,18 +10,18 @@ import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
 import sx.blah.discord.modules.Configuration;
 import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.EmbedBuilder;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-@SuppressWarnings("FieldCanBeLocal")
 public class SyncBot {
 
     private static SyncBot instance;
@@ -31,12 +31,15 @@ public class SyncBot {
 
     public List<Command> registeredCommands = new ArrayList<>();
 
-    private static final Pattern COMMAND_PATTERN = Pattern.compile("^//([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern COMMAND_PATTERN = Pattern.compile("^\\*([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
 
     public static Color BOT_COLOR = Color.decode("#" + "023563");
     public static final long MEMBERLOG_CH_ID = 263122800313761792l;
     public static final long ERROR_CH_ID = 346104666796589056l;
+    public static final long BOTLOG_CH_ID = 346483682376286208l;
+    public static final long BOTPM_CH_ID = 346104720903110656l;
     public static final List<String> ALL_SERVERS = Arrays.asList("192441520178200577", "256248900124540929", "263120914894422017");
+
     public static void main(String[] args) {
         new SyncBot();
     }
@@ -79,6 +82,9 @@ public class SyncBot {
         }
     }
 
+    /**
+     * Message Central Choo Choo
+     */
     @EventSubscriber
     public void onMessageEvent(MessageReceivedEvent event) {
         if (event.getMessage().getAuthor().isBot()) return; //ignore bot messages
@@ -99,8 +105,34 @@ public class SyncBot {
 
                 String args = matcher.group(2);
                 String[] argsArr = args.isEmpty() ? new String[0] : args.split(" ");
-                command.get().execute(this, client, argsArr, guild, message, isPrivate);
+
+                List<Long> roleIDs = message.getAuthor().getRolesForGuild(guild).stream().map(role -> role.getLongID()).collect(Collectors.toList());
+
+                IUser author = message.getAuthor();
+                String content = message.getContent();
+
+                Command cCommand = command.get();
+
+                /*
+                 * If the user is me - cback - then they can use commands on this bot
+                 */
+                if (author.getLongID() == 73416411443113984l) {
+                    cCommand.execute(message, content, argsArr, author, guild, roleIDs, isPrivate, client, this);
+                    Util.botLog(message);
+                }
             }
+            /**
+             * Forwards the random stuff people PM to the bot - to me
+             */
+        } else if (message.getChannel().isPrivate()) {
+            EmbedBuilder bld = new EmbedBuilder()
+                    .withColor(BOT_COLOR)
+                    .withTimestamp(System.currentTimeMillis())
+                    .withAuthorName(message.getAuthor().getName() + '#' + message.getAuthor().getDiscriminator())
+                    .withAuthorIcon(message.getAuthor().getAvatarURL())
+                    .withDesc(message.getContent());
+
+            Util.sendEmbed(client.getChannelByID(BOTPM_CH_ID), bld.build());
         }
     }
 
