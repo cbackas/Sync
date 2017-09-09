@@ -4,6 +4,7 @@ import cback.SyncBot;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IUser;
 
 import java.util.List;
 
@@ -12,7 +13,6 @@ public interface Command {
 
     List<String> getAliases();
 
-    void execute(SyncBot bot, IDiscordClient client, String[] args, IGuild guild, IMessage message, boolean isPrivate);
-
+    void execute(IMessage message, String content, String[] args,IUser author, IGuild guild, List<Long> roleIDs, boolean isPrivate, IDiscordClient client, SyncBot bot);
 }
 
