@@ -31,9 +31,10 @@ public class MemberChange {
                 .withFooterIcon(event.getGuild().getIconURL())
                 .withFooterText(event.getGuild().getName())
                 .withTimestamp(System.currentTimeMillis())
-                .withDescription(user.getName() + " **joined** " + event.getGuild().getName() + " " + user.mention());
+                .withColor(Color.CYAN)
+                .withDescription(Util.getTag(user) + " **joined** " + event.getGuild().getName() + " " + user.mention());
 
-        Util.sendEmbed(event.getClient().getChannelByID(SyncBot.MEMBERLOG_CH_ID), embed.withColor(Color.GREEN).build());
+        Util.sendEmbed(event.getClient().getChannelByID(SyncBot.MEMBERLOG_CH_ID), embed.build());
 
     }
 
@@ -48,9 +49,10 @@ public class MemberChange {
                 .withFooterIcon(event.getGuild().getIconURL())
                 .withFooterText(event.getGuild().getName())
                 .withTimestamp(System.currentTimeMillis())
-                .withDescription(user.getName() + " **left** " + event.getGuild().getName() + " " + user.mention());
+                .withColor(Color.YELLOW)
+                .withDescription(Util.getTag(user) + " **left** " + event.getGuild().getName() + " " + user.mention());
 
-        Util.sendEmbed(event.getClient().getChannelByID(SyncBot.MEMBERLOG_CH_ID), embed.withColor(Color.ORANGE).build());
+        Util.sendEmbed(event.getClient().getChannelByID(SyncBot.MEMBERLOG_CH_ID), embed.build());
 
     }
 
@@ -65,18 +67,19 @@ public class MemberChange {
                 .withFooterIcon(event.getGuild().getIconURL())
                 .withFooterText(event.getGuild().getName())
                 .withTimestamp(System.currentTimeMillis())
-                .withDescription(user.getName() + " was banned from " + event.getGuild().getName() + " " + user.mention());
+                .withColor(Color.RED)
+                .withDescription(Util.getTag(user) + " was banned from " + event.getGuild().getName() + " " + user.mention());
 
-        Util.sendEmbed(event.getClient().getChannelByID(SyncBot.MEMBERLOG_CH_ID), embed.withColor(Color.RED).build());
+        Util.sendEmbed(event.getClient().getChannelByID(SyncBot.MEMBERLOG_CH_ID), embed.build());
 
         /**
          * Ban Syncing
          */
-        if (SyncBot.ALL_SERVERS.contains(event.getGuild().getLongID())) {
+        if (SyncBot.ALL_SERVERS.contains(event.getGuild().getStringID())) {
             SyncBot.ALL_SERVERS.stream()
                     .filter(g -> !g.equals(event.getGuild().getLongID()))
                     .forEach(g -> {
-                        IGuild guild = event.getClient().getGuildByID(g);
+                        IGuild guild = event.getClient().getGuildByID(Long.parseLong(g));
 
                         try {
                             if (!guild.getBannedUsers().contains(user)) {
@@ -98,20 +101,22 @@ public class MemberChange {
          * Memberlog
          */
         EmbedBuilder bld = new EmbedBuilder()
-                .withDesc(Util.getTag(user) + " was **unbanned** from the server. " + user.mention())
+                .withFooterIcon(event.getGuild().getIconURL())
+                .withFooterText(event.getGuild().getName())
                 .withTimestamp(System.currentTimeMillis())
-                .withColor(Color.GREEN);
+                .withColor(Color.GREEN)
+                .withDesc(Util.getTag(user) + " was **unbanned** from " + event.getGuild().getName() + user.mention());
 
         Util.sendEmbed(event.getClient().getChannelByID(SyncBot.MEMBERLOG_CH_ID), bld.build());
 
         /**
          * Pardon Syncing
          */
-        if (SyncBot.ALL_SERVERS.contains(event.getGuild().getLongID())) {
+        if (SyncBot.ALL_SERVERS.contains(event.getGuild().getStringID())) {
             SyncBot.ALL_SERVERS.stream()
-                    .filter(g -> !g.equals(event.getGuild().getLongID()))
+                    .filter(g -> !g.equals(event.getGuild().getStringID()))
                     .forEach(g -> {
-                        IGuild guild = event.getClient().getGuildByID(g);
+                        IGuild guild = event.getClient().getGuildByID(Long.parseLong(g));
 
                         try {
                             if (guild.getBannedUsers().contains(user)) {

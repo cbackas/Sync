@@ -36,8 +36,7 @@ public class SyncBot {
     public static Color BOT_COLOR = Color.decode("#" + "023563");
     public static final long MEMBERLOG_CH_ID = 263122800313761792l;
     public static final long ERROR_CH_ID = 346104666796589056l;
-    public static final List<Long> ALL_SERVERS = Arrays.asList(192441520178200577l, 256248900124540929l, 191589587817070593l, 263120914894422017l);
-
+    public static final List<String> ALL_SERVERS = Arrays.asList("192441520178200577", "256248900124540929", "263120914894422017");
     public static void main(String[] args) {
         new SyncBot();
     }
