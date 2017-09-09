@@ -6,6 +6,11 @@ import sx.blah.discord.handle.impl.events.guild.member.NicknameChangedEvent;
 import sx.blah.discord.handle.obj.IGuild;
 
 public class NicknameChange {
+    private SyncBot bot;
+
+    public NicknameChange(SyncBot bot) {
+        this.bot = bot;
+    }
 
     @EventSubscriber
     public void nicknameChangeEvent(NicknameChangedEvent event) {
@@ -17,7 +22,7 @@ public class NicknameChange {
                     .filter(c -> !c.equals(guild.getStringID()))
                     .forEach(c -> {
                         try {
-                            event.getClient().getGuildByID(c).setUserNickname(event.getUser(), event.getUser().getDisplayName(guild));
+                            event.getClient().getGuildByID(Long.parseLong(c)).setUserNickname(event.getUser(), event.getUser().getDisplayName(guild));
                         } catch (Exception e) {
                         }
                     });
