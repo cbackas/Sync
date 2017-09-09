@@ -116,4 +116,22 @@ public class Util {
 
         sendEmbed(client.getChannelByID(SyncBot.ERROR_CH_ID), bld.build());
     }
+
+    /**
+     * Send botLog
+     */
+    public static void botLog(IMessage message) {
+        try {
+            EmbedBuilder bld = new EmbedBuilder()
+                    .withColor(SyncBot.BOT_COLOR)
+                    .withAuthorName(message.getAuthor().getName() + '#' + message.getAuthor().getDiscriminator())
+                    .withAuthorIcon(message.getAuthor().getAvatarURL())
+                    .withDesc(message.getFormattedContent())
+                    .withFooterText(message.getGuild().getName() + "/#" + message.getChannel().getName());
+
+            sendEmbed(message.getClient().getChannelByID(SyncBot.BOTLOG_CH_ID), bld.build());
+        } catch (Exception e) {
+            reportHome(message, e);
+        }
+    }
 }
