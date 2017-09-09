@@ -26,6 +26,17 @@ public class Util {
     }
 
     /**
+     * Deletes a message
+     */
+    public static void deleteMessage(IMessage message) {
+        try {
+            message.delete();
+        } catch (Exception e) {
+            reportHome(e);
+        }
+    }
+
+    /**
      * Sends an embed to the provided channel
      */
     public static IMessage sendEmbed(IChannel channel, EmbedObject embedObject) {
