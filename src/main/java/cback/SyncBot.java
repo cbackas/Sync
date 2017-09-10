@@ -1,6 +1,7 @@
 package cback;
 
 import cback.commands.Command;
+import cback.commands.CommandToDo;
 import cback.eventFunctions.*;
 import org.reflections.Reflections;
 import sx.blah.discord.api.ClientBuilder;
@@ -8,6 +9,7 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
+import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
@@ -34,10 +36,12 @@ public class SyncBot {
     private static final Pattern COMMAND_PATTERN = Pattern.compile("^\\*([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
 
     public static Color BOT_COLOR = Color.decode("#" + "023563");
+    public static final long CBACK_USR_ID = 73416411443113984l;
     public static final long MEMBERLOG_CH_ID = 263122800313761792l;
     public static final long ERROR_CH_ID = 346104666796589056l;
     public static final long BOTLOG_CH_ID = 346483682376286208l;
     public static final long BOTPM_CH_ID = 346104720903110656l;
+    public static final long TODO_CH_ID = 355971482289176576l;
     public static final List<String> ALL_SERVERS = Arrays.asList("192441520178200577", "256248900124540929", "263120914894422017");
 
     public static void main(String[] args) {
@@ -53,7 +57,9 @@ public class SyncBot {
         connect();
         client.getDispatcher().registerListener(this);
         client.getDispatcher().registerListener(new MemberChange(this));
-        client.getDispatcher().registerListener(new NicknameChange());
+        client.getDispatcher().registerListener(new NicknameChange(this));
+        client.getDispatcher().registerListener(new ReactionChange(this));
+        //
 
         registerAllCommands();
     }
@@ -114,9 +120,9 @@ public class SyncBot {
                 Command cCommand = command.get();
 
                 /*
-                 * If the user is me - cback - then they can use commands on this bot
+                 * Permission check
                  */
-                if (author.getLongID() == 73416411443113984l) {
+                if (author.getLongID() == CBACK_USR_ID) {
                     cCommand.execute(message, content, argsArr, author, guild, roleIDs, isPrivate, client, this);
                     Util.botLog(message);
                 }
