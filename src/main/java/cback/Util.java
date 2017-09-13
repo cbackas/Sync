@@ -138,7 +138,8 @@ public class Util {
                     .withAuthorName(message.getAuthor().getName() + '#' + message.getAuthor().getDiscriminator())
                     .withAuthorIcon(message.getAuthor().getAvatarURL())
                     .withDesc(message.getFormattedContent())
-                    .withFooterText(message.getGuild().getName() + "/#" + message.getChannel().getName());
+                    .withFooterText(message.getGuild().getName() + "/#" + message.getChannel().getName())
+                    .withTimestamp(System.currentTimeMillis());
 
             sendEmbed(message.getClient().getChannelByID(SyncBot.BOTLOG_CH_ID), bld.build());
         } catch (Exception e) {
