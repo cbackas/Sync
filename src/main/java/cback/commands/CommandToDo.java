@@ -24,17 +24,27 @@ public class CommandToDo implements Command {
 
     @Override
     public void execute(IMessage message, String content, String[] args, IUser author, IGuild guild, List<Long> roleIDs, boolean isPrivate, IDiscordClient client, SyncBot bot) {
-        args = content.split(" \\| ");
-        String ideaName = args[0].split(" ", 2)[1];
-        String ideaDesc = args[1];
+        String ideaName = "";
+        String ideaDesc = "";
+        try {
+            args = content.split(" \\| ");
+            ideaName = args[0].split(" ", 2)[1];
+            ideaDesc = args[1];
+        } catch (Exception e) {
+            Util.reportHome(message, e);
+        }
 
-        EmbedObject embed = ReactionChange.buildNewItem(ideaName, ideaDesc);
+        if (!ideaName.equals("") && !ideaDesc.equals("")) {
+            EmbedObject embed = ReactionChange.buildNewItem(ideaName, ideaDesc);
 
-        Util.deleteMessage(message);
+            Util.deleteMessage(message);
 
-        final IMessage todoMessage = Util.sendEmbed(client.getChannelByID(SyncBot.TODO_CH_ID), embed);
+            final IMessage todoMessage = Util.sendEmbed(client.getChannelByID(SyncBot.TODO_CH_ID), embed);
 
-        ReactionChange.updateMessageID(todoMessage);
-        ReactionChange.resetReactions(todoMessage);
+            ReactionChange.updateMessageID(todoMessage);
+            ReactionChange.resetReactions(todoMessage);
+        } else {
+            Util.simpleEmbed(message.getChannel(), "Error: check " + client.getChannelByID(SyncBot.ERROR_CH_ID) + " more info.");
+        }
     }
 }
