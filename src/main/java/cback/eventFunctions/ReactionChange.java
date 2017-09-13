@@ -34,6 +34,8 @@ public class ReactionChange {
                 updateCompletedItem(message);
             } else if (emojiName.equals("❌")) {
                 message.delete();
+            } else {
+                resetReactions(event.getMessage());
             }
         } else {
             resetReactions(event.getMessage());
