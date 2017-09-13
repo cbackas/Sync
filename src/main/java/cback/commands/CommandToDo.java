@@ -42,7 +42,6 @@ public class CommandToDo implements Command {
             final IMessage todoMessage = Util.sendEmbed(client.getChannelByID(SyncBot.TODO_CH_ID), embed);
 
             ReactionChange.updateMessageID(todoMessage);
-            ReactionChange.resetReactions(todoMessage);
         } else {
             Util.simpleEmbed(message.getChannel(), "Error: check " + client.getChannelByID(SyncBot.ERROR_CH_ID) + " more info.");
         }

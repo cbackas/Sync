@@ -30,9 +30,11 @@ public class ReactionChange {
         IMessage message = event.getMessage();
         if (user.getLongID() == SyncBot.CBACK_USR_ID) {
             String emojiName = event.getReaction().getEmoji().getName();
-            if (emojiName.equals("✅")) {
+            if (emojiName.equals("📗")) {
                 updateCompletedItem(message);
-            } else if (emojiName.equals("❌")) {
+            } else if (emojiName.equals("📙")) {
+                updateStartedItem(message);
+            } else if (emojiName.equals("📕")) {
                 message.delete();
             } else {
                 resetReactions(event.getMessage());
@@ -77,6 +79,32 @@ public class ReactionChange {
             RequestBuffer.request(() -> {
                 message.edit(text, embed.build());
             });
+
+            resetReactions(message);
+        } catch (Exception e) {
+            Util.reportHome(e);
+        }
+    }
+
+    public static void updateStartedItem(IMessage message) {
+        try {
+            IEmbed oldEmbed = message.getEmbeds().get(0);
+
+            String ideaName = oldEmbed.getEmbedFields().get(0).getName();
+            String ideaDesc = oldEmbed.getEmbedFields().get(0).getValue();
+
+            String text = "📙 - todo item started";
+            EmbedBuilder embed = new EmbedBuilder()
+                    .appendField(ideaName, ideaDesc, false)
+                    .withFooterText("ID: " + message.getStringID())
+                    .withTimestamp(System.currentTimeMillis())
+                    .withColor(Color.ORANGE);
+
+            RequestBuffer.request(() -> {
+                message.edit(text, embed.build());
+            });
+
+            resetReactions(message);
         } catch (Exception e) {
             Util.reportHome(e);
         }
@@ -89,7 +117,7 @@ public class ReactionChange {
             String ideaName = oldEmbed.getEmbedFields().get(0).getName();
             String ideaDesc = oldEmbed.getEmbedFields().get(0).getValue();
 
-            String text = "✅ - todo item completed";
+            String text = "📗 - todo item completed";
             EmbedBuilder embed = new EmbedBuilder()
                     .appendField(ideaName, ideaDesc, false)
                     .withFooterText("ID: " + message.getStringID())
@@ -112,13 +140,16 @@ public class ReactionChange {
 
     public static void resetReactions(IMessage message) {
         RequestBuffer.request(() -> {
-                message.removeAllReactions();
+            message.removeAllReactions();
         });
         RequestBuffer.request(() -> {
-                message.addReaction(EmojiManager.getByUnicode("\u2705"));
+            message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD7"));
         });
         RequestBuffer.request(() -> {
-                message.addReaction(EmojiManager.getByUnicode("\u274C"));
+            message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD5"));
+        });
+        RequestBuffer.request(() -> {
+            message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD9"));
         });
     }
 }

@@ -1,7 +1,6 @@
 package cback;
 
 import cback.commands.Command;
-import cback.commands.CommandToDo;
 import cback.eventFunctions.*;
 import org.reflections.Reflections;
 import sx.blah.discord.api.ClientBuilder;
@@ -9,7 +8,6 @@ import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.ReadyEvent;
 import sx.blah.discord.handle.impl.events.guild.channel.message.MessageReceivedEvent;
-import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.obj.IGuild;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
