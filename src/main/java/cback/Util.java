@@ -5,9 +5,7 @@ import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.EmbedBuilder;
-import sx.blah.discord.util.MessageBuilder;
-import sx.blah.discord.util.RequestBuffer;
+import sx.blah.discord.util.*;
 
 import java.awt.*;
 
@@ -44,7 +42,7 @@ public class Util {
             try {
                 return new MessageBuilder(SyncBot.getInstance().getClient()).withEmbed(embedObject)
                         .withChannel(channel).send();
-            } catch (Exception e) {
+            } catch (MissingPermissionsException | DiscordException e) {
                 reportHome(e);
             }
             return null;
