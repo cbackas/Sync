@@ -5,10 +5,13 @@ import cback.Util;
 import cback.eventFunctions.ReactionChange;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
-import sx.blah.discord.handle.obj.IGuild;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.*;
+import sx.blah.discord.util.DiscordException;
+import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.MissingPermissionsException;
+import sx.blah.discord.util.RequestBuffer;
 
+import java.awt.*;
 import java.util.List;
 
 public class CommandToDo implements Command {
@@ -35,15 +38,51 @@ public class CommandToDo implements Command {
         }
 
         if (!ideaName.equals("") && !ideaDesc.equals("")) {
-            EmbedObject embed = ReactionChange.buildNewItem(ideaName, ideaDesc);
+            IChannel todoChannel = client.getChannelByID(SyncBot.TODO_CH_ID);
+            EmbedObject embed = buildNewItem(ideaName, ideaDesc);
+            sendNewItem(todoChannel, embed);
 
             Util.deleteMessage(message);
+        }
+    }
 
-            final IMessage todoMessage = Util.sendEmbed(client.getChannelByID(SyncBot.TODO_CH_ID), embed);
+    public void sendNewItem(IChannel channel, EmbedObject embed) {
+        IMessage todoMessage = Util.sendEmbed(channel, embed);
+        updateMessageID(todoMessage);
+    }
 
-            ReactionChange.updateMessageID(todoMessage);
-        } else {
-            Util.simpleEmbed(message.getChannel(), "Error: check " + client.getChannelByID(SyncBot.ERROR_CH_ID) + " more info.");
+    public EmbedObject buildNewItem(String ideaName, String ideaDesc) {
+        try {
+            EmbedBuilder embed = new EmbedBuilder()
+                    .withAuthorName("\uD83D\uDDC3 new todo item")
+                    .appendField(ideaName, ideaDesc, false)
+                    .withFooterText("ID: null")
+                    .withTimestamp(System.currentTimeMillis())
+                    .withColor(Color.WHITE);
+            return embed.build();
+        } catch (Exception e) {
+            Util.reportHome(e);
+        }
+        return null;
+    }
+
+    public void updateMessageID(IMessage message) {
+        try {
+            IEmbed oldEmbed = message.getEmbeds().get(0);
+
+            String ideaName = oldEmbed.getEmbedFields().get(0).getName();
+            String ideaDesc = oldEmbed.getEmbedFields().get(0).getValue();
+
+            String text = "\uD83D\uDDC3 - new todo item";
+            EmbedBuilder embed = new EmbedBuilder()
+                    .appendField(ideaName, ideaDesc, false)
+                    .withFooterText("ID: " + message.getStringID())
+                    .withTimestamp(System.currentTimeMillis())
+                    .withColor(Color.WHITE);
+
+            RequestBuffer.request(() -> message.edit(text, embed.build()));
+        } catch (DiscordException | MissingPermissionsException e) {
+            Util.reportHome(e);
         }
     }
 }

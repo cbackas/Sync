@@ -50,44 +50,6 @@ public class ReactionChange {
         }
     }
 
-    /**
-     * Builds embeds so that editing can be done and stuff
-     */
-    public EmbedObject buildNewItem(String ideaName, String ideaDesc) {
-        try {
-            EmbedBuilder embed = new EmbedBuilder()
-                    .withAuthorName("\uD83D\uDDC3 new todo item")
-                    .appendField(ideaName, ideaDesc, false)
-                    .withFooterText("ID: null")
-                    .withTimestamp(System.currentTimeMillis())
-                    .withColor(Color.WHITE);
-            return embed.build();
-        } catch (Exception e) {
-            Util.reportHome(e);
-        }
-        return null;
-    }
-
-    public void updateMessageID(IMessage message) {
-        try {
-            IEmbed oldEmbed = message.getEmbeds().get(0);
-
-            String ideaName = oldEmbed.getEmbedFields().get(0).getName();
-            String ideaDesc = oldEmbed.getEmbedFields().get(0).getValue();
-
-            String text = "\uD83D\uDDC3 - new todo item";
-            EmbedBuilder embed = new EmbedBuilder()
-                    .appendField(ideaName, ideaDesc, false)
-                    .withFooterText("ID: " + message.getStringID())
-                    .withTimestamp(System.currentTimeMillis())
-                    .withColor(Color.WHITE);
-
-            RequestBuffer.request(() -> message.edit(text, embed.build()));
-        } catch (Exception e) {
-            Util.reportHome(e);
-        }
-    }
-
     public void updateStartedItem(IMessage message, IUser user, IReaction reaction) {
         try {
             IEmbed oldEmbed = message.getEmbeds().get(0);
@@ -104,7 +66,7 @@ public class ReactionChange {
 
             removeReaction(message, user, reaction);
             RequestBuffer.request(() -> message.edit(text, embed.build()));
-        } catch (Exception e) {
+        } catch (DiscordException | MissingPermissionsException e) {
             Util.reportHome(e);
         }
     }
@@ -125,7 +87,7 @@ public class ReactionChange {
 
             removeReaction(message, user, reaction);
             RequestBuffer.request(() -> message.edit(text, embed.build()));
-        } catch (Exception e) {
+        } catch (DiscordException | MissingPermissionsException e) {
             Util.reportHome(e);
         }
     }
