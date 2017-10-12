@@ -34,13 +34,15 @@ public class SyncBot {
     private static final Pattern COMMAND_PATTERN = Pattern.compile("^\\*([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
 
     public static Color BOT_COLOR = Color.decode("#" + "023563");
-    public static final long CBACK_USR_ID = 73416411443113984l;
-    public static final long MEMBERLOG_CH_ID = 263122800313761792l;
-    public static final long ERROR_CH_ID = 346104666796589056l;
-    public static final long BOTLOG_CH_ID = 346483682376286208l;
-    public static final long BOTPM_CH_ID = 346104720903110656l;
-    public static final long TODO_CH_ID = 355971482289176576l;
+    public static final long CBACK_USR_ID = 73416411443113984L;
+    public static final long HUB_GLD_ID = 346104115169853440L;
     public static final List<String> ALL_SERVERS = Arrays.asList("192441520178200577", "256248900124540929", "263120914894422017");
+
+    public static final long MEMBERLOG_CH_ID = 263122800313761792L;
+    public static final long ERROR_CH_ID = 346104666796589056L;
+    public static final long BOTLOG_CH_ID = 346483682376286208L;
+    public static final long BOTPM_CH_ID = 346104720903110656L;
+    public static final long TODO_CH_ID = 355971482289176576L;
 
     public static void main(String[] args) {
         new SyncBot();
