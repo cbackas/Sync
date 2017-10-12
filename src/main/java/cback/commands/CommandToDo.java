@@ -39,19 +39,13 @@ public class CommandToDo implements Command {
 
         if (!ideaName.equals("") && !ideaDesc.equals("")) {
             IChannel todoChannel = client.getChannelByID(SyncBot.TODO_CH_ID);
-            EmbedObject embed = buildNewItem(ideaName, ideaDesc);
-            sendNewItem(todoChannel, embed);
+            sendNewItem(todoChannel, ideaName, ideaDesc);
 
             Util.deleteMessage(message);
         }
     }
 
-    public void sendNewItem(IChannel channel, EmbedObject embed) {
-        IMessage todoMessage = Util.sendEmbed(channel, embed);
-        updateMessageID(todoMessage);
-    }
-
-    public EmbedObject buildNewItem(String ideaName, String ideaDesc) {
+    public void sendNewItem(IChannel channel, String ideaName, String ideaDesc) {
         try {
             EmbedBuilder embed = new EmbedBuilder()
                     .withAuthorName("\uD83D\uDDC3 new todo item")
@@ -59,11 +53,12 @@ public class CommandToDo implements Command {
                     .withFooterText("ID: null")
                     .withTimestamp(System.currentTimeMillis())
                     .withColor(Color.WHITE);
-            return embed.build();
+
+            IMessage todoMessage = Util.sendEmbed(channel, embed.build());
+            updateMessageID(todoMessage);
         } catch (Exception e) {
             Util.reportHome(e);
         }
-        return null;
     }
 
     public void updateMessageID(IMessage message) {
