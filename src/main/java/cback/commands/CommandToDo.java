@@ -2,9 +2,7 @@ package cback.commands;
 
 import cback.SyncBot;
 import cback.Util;
-import cback.eventFunctions.ReactionChange;
 import sx.blah.discord.api.IDiscordClient;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.EmbedBuilder;
@@ -40,6 +38,11 @@ public class CommandToDo implements Command {
         if (!ideaName.equals("") && !ideaDesc.equals("")) {
             IChannel todoChannel = client.getChannelByID(SyncBot.TODO_CH_ID);
             sendNewItem(todoChannel, ideaName, ideaDesc);
+
+            IChannel messageChannel = message.getChannel();
+            if (messageChannel.getGuild().getLongID() != SyncBot.HUB_GLD_ID) {
+                Util.simpleEmbed(messageChannel, "New todo added. \"" + ideaDesc + "\"");
+            }
 
             Util.deleteMessage(message);
         }
