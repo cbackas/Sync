@@ -2,14 +2,16 @@ package cback.eventFunctions;
 
 import cback.SyncBot;
 import cback.Util;
-import com.vdurmont.emoji.EmojiManager;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.obj.IEmbed;
 import sx.blah.discord.handle.obj.IMessage;
+import sx.blah.discord.handle.obj.IReaction;
 import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.EmbedBuilder;
+import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RequestBuffer;
 
 import java.awt.*;
@@ -26,28 +28,32 @@ public class ReactionChange {
         if (event.getUser().isBot() || event.getChannel().getLongID() != SyncBot.TODO_CH_ID) {
             return; //ignores bot reactions and reactions not related to the list
         }
-        IUser user = event.getUser();
+
         IMessage message = event.getMessage();
+        IUser user = event.getUser();
+        IReaction reaction = event.getReaction();
         if (user.getLongID() == SyncBot.CBACK_USR_ID) {
             String emojiName = event.getReaction().getEmoji().getName();
+
             if (emojiName.equals("📗")) {
-                updateCompletedItem(message);
+                updateCompletedItem(message, user, reaction);
             } else if (emojiName.equals("📙")) {
-                updateStartedItem(message);
+                updateStartedItem(message, user, reaction);
             } else if (emojiName.equals("📕")) {
                 message.delete();
             } else {
-                resetReactions(event.getMessage());
+                removeReaction(message, user, reaction);
             }
+
         } else {
-            resetReactions(event.getMessage());
+            removeReaction(message, user, reaction);
         }
     }
 
     /**
      * Builds embeds so that editing can be done and stuff
      */
-    public static EmbedObject buildNewItem(String ideaName, String ideaDesc) {
+    public EmbedObject buildNewItem(String ideaName, String ideaDesc) {
         try {
             EmbedBuilder embed = new EmbedBuilder()
                     .withAuthorName("\uD83D\uDDC3 new todo item")
@@ -62,7 +68,7 @@ public class ReactionChange {
         return null;
     }
 
-    public static void updateMessageID(IMessage message) {
+    public void updateMessageID(IMessage message) {
         try {
             IEmbed oldEmbed = message.getEmbeds().get(0);
 
@@ -76,17 +82,13 @@ public class ReactionChange {
                     .withTimestamp(System.currentTimeMillis())
                     .withColor(Color.WHITE);
 
-            RequestBuffer.request(() -> {
-                message.edit(text, embed.build());
-            });
-
-            resetReactions(message);
+            RequestBuffer.request(() -> message.edit(text, embed.build()));
         } catch (Exception e) {
             Util.reportHome(e);
         }
     }
 
-    public static void updateStartedItem(IMessage message) {
+    public void updateStartedItem(IMessage message, IUser user, IReaction reaction) {
         try {
             IEmbed oldEmbed = message.getEmbeds().get(0);
 
@@ -100,17 +102,14 @@ public class ReactionChange {
                     .withTimestamp(System.currentTimeMillis())
                     .withColor(Color.ORANGE);
 
-            RequestBuffer.request(() -> {
-                message.edit(text, embed.build());
-            });
-
-            resetReactions(message);
+            removeReaction(message, user, reaction);
+            RequestBuffer.request(() -> message.edit(text, embed.build()));
         } catch (Exception e) {
             Util.reportHome(e);
         }
     }
 
-    public static void updateCompletedItem(IMessage message) {
+    public void updateCompletedItem(IMessage message, IUser user, IReaction reaction) {
         try {
             IEmbed oldEmbed = message.getEmbeds().get(0);
 
@@ -124,32 +123,18 @@ public class ReactionChange {
                     .withTimestamp(System.currentTimeMillis())
                     .withColor(Color.GREEN);
 
-            RequestBuffer.request(() -> {
-                message.removeAllReactions();
-            });
-
-            RequestBuffer.request(() -> {
-                message.edit(text, embed.build());
-            });
-
-
+            removeReaction(message, user, reaction);
+            RequestBuffer.request(() -> message.edit(text, embed.build()));
         } catch (Exception e) {
             Util.reportHome(e);
         }
     }
 
-    public static void resetReactions(IMessage message) {
-        RequestBuffer.request(() -> {
-            message.removeAllReactions();
-        });
-        RequestBuffer.request(() -> {
-            message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD7"));
-        });
-        RequestBuffer.request(() -> {
-            message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD5"));
-        });
-        RequestBuffer.request(() -> {
-            message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD9"));
-        });
+    public void removeReaction(IMessage message, IUser user, IReaction reaction) {
+        try {
+            RequestBuffer.request(() -> message.removeReaction(user, reaction));
+        } catch (DiscordException | MissingPermissionsException e) {
+            Util.reportHome(e);
+        }
     }
 }
