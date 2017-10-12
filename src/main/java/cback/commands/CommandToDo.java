@@ -2,6 +2,7 @@ package cback.commands;
 
 import cback.SyncBot;
 import cback.Util;
+import com.vdurmont.emoji.EmojiManager;
 import sx.blah.discord.api.IDiscordClient;
 import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
@@ -79,8 +80,28 @@ public class CommandToDo implements Command {
                     .withColor(Color.WHITE);
 
             RequestBuffer.request(() -> message.edit(text, embed.build()));
+            setReactOptions(message);
         } catch (DiscordException | MissingPermissionsException e) {
             Util.reportHome(e);
         }
+    }
+
+    //adds the 3 reaction voting options to the message
+    private void setReactOptions(IMessage message) {
+        RequestBuffer.RequestFuture<Boolean> future1 = RequestBuffer.request(() -> {
+            message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD7")); //green
+            return true;
+        });
+        future1.get();
+        RequestBuffer.RequestFuture<Boolean> future2 = RequestBuffer.request(() -> {
+            message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD9")); //orange
+            return true;
+        });
+        future2.get();
+        RequestBuffer.RequestFuture<Boolean> future3 = RequestBuffer.request(() -> {
+            message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD5")); //red
+            return true;
+        });
+        future3.get();
     }
 }
