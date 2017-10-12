@@ -48,7 +48,7 @@ public class CommandToDo implements Command {
         }
     }
 
-    public void sendNewItem(IChannel channel, String ideaName, String ideaDesc) {
+    private void sendNewItem(IChannel channel, String ideaName, String ideaDesc) {
         try {
             EmbedBuilder embed = new EmbedBuilder()
                     .withAuthorName("\uD83D\uDDC3 new todo item")
@@ -64,7 +64,7 @@ public class CommandToDo implements Command {
         }
     }
 
-    public void updateMessageID(IMessage message) {
+    private void updateMessageID(IMessage message) {
         try {
             IEmbed oldEmbed = message.getEmbeds().get(0);
 

@@ -49,7 +49,7 @@ public class ReactionChange {
         }
     }
 
-    public void updateStartedItem(IMessage message, IUser user, IReaction reaction) {
+    private void updateStartedItem(IMessage message, IUser user, IReaction reaction) {
         try {
             IEmbed oldEmbed = message.getEmbeds().get(0);
 
@@ -70,7 +70,7 @@ public class ReactionChange {
         }
     }
 
-    public void updateCompletedItem(IMessage message, IUser user, IReaction reaction) {
+    private void updateCompletedItem(IMessage message, IUser user, IReaction reaction) {
         try {
             IEmbed oldEmbed = message.getEmbeds().get(0);
 
@@ -91,7 +91,7 @@ public class ReactionChange {
         }
     }
 
-    public void removeReaction(IMessage message, IUser user, IReaction reaction) {
+    private void removeReaction(IMessage message, IUser user, IReaction reaction) {
         try {
             RequestBuffer.request(() -> message.removeReaction(user, reaction));
         } catch (DiscordException | MissingPermissionsException e) {
