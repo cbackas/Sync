@@ -84,7 +84,7 @@ public class ReactionChange {
                     .withTimestamp(System.currentTimeMillis())
                     .withColor(Color.GREEN);
 
-            removeReaction(message, user, reaction);
+            RequestBuffer.request(() -> message.removeAllReactions());
             RequestBuffer.request(() -> message.edit(text, embed.build()));
         } catch (DiscordException | MissingPermissionsException e) {
             Util.reportHome(e);
