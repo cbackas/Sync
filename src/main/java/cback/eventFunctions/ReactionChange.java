@@ -3,7 +3,6 @@ package cback.eventFunctions;
 import cback.SyncBot;
 import cback.Util;
 import sx.blah.discord.api.events.EventSubscriber;
-import sx.blah.discord.api.internal.json.objects.EmbedObject;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
 import sx.blah.discord.handle.obj.IEmbed;
 import sx.blah.discord.handle.obj.IMessage;
