@@ -2,12 +2,10 @@ package cback.eventFunctions;
 
 import cback.SyncBot;
 import cback.Util;
+import cback.commands.CommandToDo;
 import sx.blah.discord.api.events.EventSubscriber;
 import sx.blah.discord.handle.impl.events.guild.channel.message.reaction.ReactionAddEvent;
-import sx.blah.discord.handle.obj.IEmbed;
-import sx.blah.discord.handle.obj.IMessage;
-import sx.blah.discord.handle.obj.IReaction;
-import sx.blah.discord.handle.obj.IUser;
+import sx.blah.discord.handle.obj.*;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.EmbedBuilder;
 import sx.blah.discord.util.MissingPermissionsException;
@@ -35,9 +33,9 @@ public class ReactionChange {
             String emojiName = event.getReaction().getEmoji().getName();
 
             if (emojiName.equals("📗")) {
-                updateCompletedItem(message, user, reaction);
+                updateCompletedItem(message);
             } else if (emojiName.equals("📙")) {
-                updateStartedItem(message, user, reaction);
+                updateStartedItem(message);
             } else if (emojiName.equals("📕")) {
                 message.delete();
             } else {
@@ -49,7 +47,7 @@ public class ReactionChange {
         }
     }
 
-    private void updateStartedItem(IMessage message, IUser user, IReaction reaction) {
+    private void updateStartedItem(IMessage message) {
         try {
             IEmbed oldEmbed = message.getEmbeds().get(0);
 
@@ -63,14 +61,16 @@ public class ReactionChange {
                     .withTimestamp(System.currentTimeMillis())
                     .withColor(Color.ORANGE);
 
-            removeReaction(message, user, reaction);
-            RequestBuffer.request(() -> message.edit(text, embed.build()));
+            IChannel todoChannel = message.getChannel();
+            Util.deleteMessage(message);
+            message = todoChannel.sendMessage(text, embed.build());
+            CommandToDo.setReactOptions(message);
         } catch (DiscordException | MissingPermissionsException e) {
             Util.reportHome(e);
         }
     }
 
-    private void updateCompletedItem(IMessage message, IUser user, IReaction reaction) {
+    private void updateCompletedItem(IMessage message) {
         try {
             IEmbed oldEmbed = message.getEmbeds().get(0);
 

@@ -87,7 +87,7 @@ public class CommandToDo implements Command {
     }
 
     //adds the 3 reaction voting options to the message
-    private void setReactOptions(IMessage message) {
+    public static void setReactOptions(IMessage message) {
         RequestBuffer.RequestFuture<Boolean> future1 = RequestBuffer.request(() -> {
             message.addReaction(EmojiManager.getByUnicode("\uD83D\uDCD7")); //green
             return true;
