@@ -31,7 +31,7 @@ public class SyncBot {
 
     public List<Command> registeredCommands = new ArrayList<>();
 
-    private static final Pattern COMMAND_PATTERN = Pattern.compile("^\\*([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
+    private static final Pattern COMMAND_PATTERN = Pattern.compile("(?s)^\\*([^\\s]+) ?(.*)", Pattern.CASE_INSENSITIVE);
 
     public static Color BOT_COLOR = Color.decode("#" + "023563");
     public static final long CBACK_USR_ID = 73416411443113984L;
